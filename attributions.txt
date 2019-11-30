@@ -1,1 +1,2 @@
-- PyKafka documentation.
+- Sample code in PyKafka documentation.
+- Sample code in psycopg2 documentation.
