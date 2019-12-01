@@ -2,7 +2,7 @@ from pykafka import KafkaClient, SslConfig
 from socket import gethostname
 from datetime import datetime
 from pickle import dumps
-from time import sleep
+import time
 import logging
 from os import getenv
 
@@ -36,7 +36,7 @@ def produce(kafka_client, limit=None):
             producer.produce(dumps(msg))
             logging.log(logging.INFO, f'message #{count} sent')
             count += 1
-            sleep(10)
+            time.sleep(10)
 
 
 if __name__ == '__main__':
