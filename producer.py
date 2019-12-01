@@ -10,8 +10,6 @@ KAFKA_HOST = getenv('KAFKA_HOST')
 KAFKA_TOPIC = getenv('KAFKA_TOPIC', "os_metrics")
 MACHINE_IDENTIFIER = gethostname()
 
-logging.basicConfig(level=logging.INFO)
-
 
 def get_time():
     return datetime.utcnow().timestamp()
@@ -27,6 +25,8 @@ def get_metrics():
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
+
     config = SslConfig(cafile='./ca.pem',
                        certfile='./service.cert',
                        keyfile='./service.key')
