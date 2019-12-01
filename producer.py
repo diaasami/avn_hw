@@ -24,6 +24,21 @@ def get_metrics():
             }
 
 
+def produce(kafka_client, limit=None):
+    logging.log(logging.INFO, 'connected to kafka')
+
+    topic = kafka_client.topics[KAFKA_TOPIC]
+
+    count = 0
+    with topic.get_producer() as producer:
+        while limit is None or count < limit:
+            msg = {'machine': MACHINE_IDENTIFIER, 'time': get_time(), 'metrics': get_metrics()}
+            producer.produce(dumps(msg))
+            logging.log(logging.INFO, f'message #{count} sent')
+            count += 1
+            sleep(10)
+
+
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
 
@@ -32,16 +47,7 @@ if __name__ == '__main__':
                        keyfile='./service.key')
 
     client = KafkaClient(hosts=KAFKA_HOST, ssl_config=config)
-    logging.log(logging.INFO, 'connected to kafka')
 
-    topic = client.topics[KAFKA_TOPIC]
+    produce(client)
 
-    count = 0
-    with topic.get_producer() as producer:
-        while True:
-            msg = {'machine': MACHINE_IDENTIFIER, 'time': get_time(), 'metrics': get_metrics()}
-            producer.produce(dumps(msg))
-            logging.log(logging.INFO, f'message #{count} sent')
-            count += 1
-            sleep(10)
 
