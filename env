@@ -1,0 +1,9 @@
+# Kafka
+export KAFKA_HOST=
+
+# PgSQL
+export PG_HOST=
+export PG_PORT=
+export PG_USERNAME=
+export PG_PASSWORD=
+
