@@ -2,6 +2,7 @@ from pykafka import KafkaClient, SslConfig
 from socket import gethostname
 from datetime import datetime
 from pickle import dumps
+from psutil import virtual_memory
 import time
 import logging
 from os import getenv
@@ -16,12 +17,11 @@ def get_time():
 
 
 def get_metrics():
-    with open('/proc/meminfo') as memInfo:
-        lines = memInfo.readlines()
-        return {
-            'totalMem': int(lines[0].split()[1]),
-            'freeMem': int(lines[1].split()[1])
-            }
+    vm_info = virtual_memory()
+    return {
+        'availableMem': vm_info.available,
+        'usedMemPer': vm_info.percent
+        }
 
 
 def produce(kafka_client, limit=None):

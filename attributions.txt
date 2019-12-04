@@ -1,2 +1,2 @@
-- Sample code in PyKafka documentation.
-- Sample code in psycopg2 documentation.
+- Sample code in PyKafka documentation (create connection, async producer, simple consumer)
+- Sample code in psycopg2 documentation (create connection, fetch results from cursor)
