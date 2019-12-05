@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
-source ./env
-python ./producer.py
+./bin/python ./producer.py

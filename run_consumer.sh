@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
-source ./env
-python ./consumer.py
+./bin/python ./consumer.py
