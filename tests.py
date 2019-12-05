@@ -7,9 +7,10 @@ from pickle import loads, dumps
 
 
 class TestProducer(unittest.TestCase):
-    @mock.patch('producer.get_metrics', return_value={})
+    @mock.patch('producer.get_os_metrics', return_value={})
     @mock.patch('time.sleep', return_value=None)
-    def test_producer(self, sleep, get_metrics):
+    def test_producer(self, sleep, get_os_metrics):
+        # setup kafka mocks
         kafka_mock = Mock()
         kafka_mock.topics = {producer_module.KAFKA_TOPIC: Mock()}
         kafka_producer = Mock()
@@ -27,19 +28,19 @@ class TestProducer(unittest.TestCase):
                 obj_keys = loads(msg).keys()
                 return all(k in obj_keys for k in ["machine", "time", "metrics"])
 
-        get_metrics.assert_called_once()
+        get_os_metrics.assert_called_once()
         topic.get_producer.assert_called_once()
         kafka_producer.return_value.produce.assert_called_once_with(ValidateMessageStructure())
 
     def test_get_metrics(self):
-        output = producer_module.get_metrics()
+        output = producer_module.get_os_metrics()
 
         assert(output is not None)
         assert(len(output.keys()) > 0)
 
     def test_get_time(self):
-        t1 = producer_module.get_time()
-        t2 = producer_module.get_time()
+        t1 = producer_module.get_utc_timestamp()
+        t2 = producer_module.get_utc_timestamp()
 
         assert(t2 > t1)
 
@@ -48,7 +49,6 @@ class TestConsumer(unittest.TestCase):
     def test_consumer(self):
         # setup kafka mocks
         kafka_mock = Mock()
-        kafka_consumer_mock = Mock()
         topic = Mock()
 
         kafka_mock.topics = {consumer_module.KAFKA_TOPIC: topic}

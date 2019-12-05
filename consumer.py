@@ -24,9 +24,9 @@ def consume_and_insert_in_db(kafka_client, pg_con, limit=None):
         for message in consumer:
             if message is not None:
                 obj_msg = loads(message.value)
-                # print(message.offset, objMsg)
 
                 try:
+                    # TODO: batch insertion
                     cur.execute("INSERT INTO metrics "
                                 "VALUES(%s, %s, %s);",
                                 (psycopg2.TimestampFromTicks(obj_msg['time']), obj_msg['machine'],

@@ -12,11 +12,11 @@ KAFKA_TOPIC = getenv('KAFKA_TOPIC', "os_metrics")
 MACHINE_IDENTIFIER = gethostname()
 
 
-def get_time():
+def get_utc_timestamp():
     return datetime.utcnow().timestamp()
 
 
-def get_metrics():
+def get_os_metrics():
     vm_info = virtual_memory()
     return {
         'availableMem': vm_info.available,
@@ -32,7 +32,7 @@ def produce(kafka_client, limit=None):
     count = 0
     with topic.get_producer() as producer:
         while limit is None or count < limit:
-            msg = {'machine': MACHINE_IDENTIFIER, 'time': get_time(), 'metrics': get_metrics()}
+            msg = {'machine': MACHINE_IDENTIFIER, 'time': get_utc_timestamp(), 'metrics': get_os_metrics()}
             producer.produce(dumps(msg))
             logging.log(logging.INFO, f'message #{count} sent')
             count += 1
