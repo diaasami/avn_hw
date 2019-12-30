@@ -9,7 +9,6 @@
 
 # Code
 
-* Tests are in `tests.py`
-* Producer code is in `producer.py`
-* Consumer code is in `consumer.py`
+* Producer code & tests are in `producer` package
+* Coonsumer code & tests are in `consumer` package
 * DB setup code is in `setup_db.sql`
