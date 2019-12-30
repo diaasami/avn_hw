@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-./bin/python ./tests.py
+./bin/python -m unittest
