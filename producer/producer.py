@@ -7,7 +7,9 @@ from psutil import virtual_memory
 
 
 class Producer:
-    def __init__(self, kafka_host, kafka_topic, machine_identifier):
+    def __init__(self, kafka_host, kafka_topic, machine_identifier, logger=None):
+        self.logger = logger if logger else logging.getLogger(self.__class__.__name__)
+
         self.KAFKA_TOPIC = kafka_topic
         self.MACHINE_IDENTIFIER = machine_identifier
 
@@ -16,6 +18,8 @@ class Producer:
                            keyfile='./service.key')
 
         self.kafka_client = KafkaClient(hosts=kafka_host, ssl_config=config)
+
+        self.logger.log(logging.INFO, 'connected to kafka')
 
     @staticmethod
     def get_utc_timestamp():
@@ -30,8 +34,6 @@ class Producer:
             }
 
     def produce(self, limit=None):
-        logging.log(logging.INFO, 'connected to kafka')
-
         topic = self.kafka_client.topics[self.KAFKA_TOPIC]
 
         count = 0
@@ -41,6 +43,6 @@ class Producer:
                        'time': Producer.get_utc_timestamp(),
                        'metrics': Producer.get_os_metrics()}
                 producer.produce(dumps(msg))
-                logging.log(logging.INFO, f'message #{count} sent')
+                self.logger.log(logging.INFO, f'message #{count} sent')
                 count += 1
                 time.sleep(10)
