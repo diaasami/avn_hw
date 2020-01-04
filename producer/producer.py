@@ -4,8 +4,6 @@ from pickle import dumps
 import time
 import logging
 from psutil import virtual_memory
-from os import getenv
-from socket import gethostname
 
 
 class Producer:
@@ -46,12 +44,3 @@ class Producer:
                 logging.log(logging.INFO, f'message #{count} sent')
                 count += 1
                 time.sleep(10)
-
-
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
-
-    producer = Producer(kafka_host=getenv("KAFKA_HOST"),
-                        kafka_topic=getenv("KAFKA_TOPIC"),
-                        machine_identifier=gethostname())
-    producer.produce()
